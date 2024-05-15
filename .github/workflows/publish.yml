@@ -1,0 +1,50 @@
+name: Publish
+on:
+  push:
+    tags:
+      - "*"
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: "1.22.x"
+      - name: Install dependencies
+        run: go get .
+      - name: Build Linux binary
+        run: GOARCH=amd64 go build -o build/ -v ./...
+      - name: Build Windows binary
+        run: GOOS=windows GOARCH=amd64 go build -o build/ -v ./...
+
+      - name: Create Release
+        id: create_release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: |
+            build/cost_func_genie
+            build/cost_func_genie.exe
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Upload Linux Asset
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./build/cost_func_genie
+          asset_name: cost_func_genie-linux-amd64
+          asset_content_type: application/octet-stream
+      - name: Upload Windows Asset
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./build/cost_func_genie.exe
+          asset_name: cost_func_genie-windows-amd64.exe
+          asset_content_type: application/octet-stream
