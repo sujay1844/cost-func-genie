@@ -20,9 +20,9 @@ jobs:
       - name: Install dependencies
         run: go get .
       - name: Build Linux binary
-        run: GOARCH=amd64 go build -o build/ -v ./...
+        run: GOARCH=amd64 go build -o build/ ./...
       - name: Build Windows binary
-        run: GOOS=windows GOARCH=amd64 go build -o build/ -v ./...
+        run: GOOS=windows GOARCH=amd64 go build -o build/ ./...
 
       - name: Create Release
         id: create_release
@@ -33,21 +33,3 @@ jobs:
             build/cost_func_genie.exe
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      - name: Upload Linux Asset
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./build/cost_func_genie
-          asset_name: cost_func_genie-linux-amd64
-          asset_content_type: application/octet-stream
-      - name: Upload Windows Asset
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./build/cost_func_genie.exe
-          asset_name: cost_func_genie-windows-amd64.exe
-          asset_content_type: application/octet-stream
