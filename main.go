@@ -66,7 +66,7 @@ func GetMetric() string {
 func DisplayMetric(metric string) {
 	huh.NewNote().
 		Title("Recommended Metric: " + metric).
-		Description("[Press enter to exit]").
+		Description("[Press any key to exit]").
 		WithTheme(huh.ThemeCatppuccin()).
 		Run()
 
@@ -76,10 +76,10 @@ func DisplayMetric(metric string) {
 func Intro() {
 	fmt.Println()
 	err := huh.NewNote().
-		Title("Welcome to the Cost-Func-Genie!").
-		Description(`I will tell you what performance metric to use based
-on your needs for imbalanced binary classification.
-[Press enter to continue]`).
+		Title("Hi! I'm CostFunc Genie.").
+		Description(`I'm here to help you choose the right performance metric
+for your imbalanced binary classification problem.
+[Press any key to continue]`).
 		WithTheme(Theme).
 		Run()
 
