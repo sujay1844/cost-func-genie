@@ -12,13 +12,14 @@
   in {
     devShells.${system}.default = pkgs.mkShell {
       buildInputs = with pkgs; [
-		go
-		gopls
-		delve
+        go # Compiler
+        gopls # LSP
+        delve # Debugger
       ];
 
 	  shellHook = ''
-		${pkgs.gopls}/bin/gopls > /tmp/gopls.log 2>&1 &
+      echo "Starting gopls..."
+      ${pkgs.gopls}/bin/gopls > /tmp/gopls.log 2>&1 &
 	  '';
     };
   };
